@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DFMS Faculty Check-In</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="app-page">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <h1>DFMS Faculty Check-In</h1>
+      <div class="header-right">
+        <span id="who" class="muted"></span>
+        <button type="button" id="logout-btn" class="btn-secondary">Sign out</button>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" data-tab="checkin" role="tab">Check-In</button>
+      <button class="tab" data-tab="roster" role="tab">Roster</button>
+      <button class="tab" data-tab="account" role="tab">Account</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <!-- Check-In tab -->
+    <section id="tab-checkin" class="tab-panel" role="tabpanel" hidden>
+      <h2>Log a check-in</h2>
+      <p class="muted">Pick a status. Your timestamp is recorded when you click.</p>
+
+      <div class="status-buttons">
+        <button type="button" class="status-btn status-available"  data-status="available">Available</button>
+        <button type="button" class="status-btn status-unavailable" data-status="unavailable">Unavailable</button>
+        <button type="button" class="status-btn status-onleave"    data-status="onleave">On leave</button>
+      </div>
+
+      <label for="note">Note (optional)</label>
+      <textarea id="note" rows="2" maxlength="500" placeholder="e.g., Driving in from Monument, ETA 20 min"></textarea>
+
+      <p id="checkin-message" class="status-message" role="status" aria-live="polite"></p>
+
+      <h3>Your last 10 check-ins</h3>
+      <div class="table-wrap">
+        <table id="history-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Note</th>
+              <th>When</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="history-empty" class="muted" hidden>No check-ins yet.</p>
+    </section>
+
+    <!-- Roster tab -->
+    <section id="tab-roster" class="tab-panel" role="tabpanel" hidden>
+      <div class="roster-header">
+        <h2>Roster &mdash; most recent check-in per person</h2>
+        <div class="roster-actions">
+          <button type="button" id="refresh-roster" class="btn-secondary">Refresh</button>
+          <button type="button" id="export-csv">Export CSV</button>
+        </div>
+      </div>
+      <p id="roster-meta" class="muted"></p>
+      <div class="table-wrap">
+        <table id="roster-table">
+          <thead>
+            <tr>
+              <th data-sort="displayName">Name <span class="sort-indicator"></span></th>
+              <th data-sort="email">Email <span class="sort-indicator"></span></th>
+              <th data-sort="status">Status <span class="sort-indicator"></span></th>
+              <th>Note</th>
+              <th data-sort="timestamp">Last check-in <span class="sort-indicator"></span></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="roster-empty" class="muted" hidden>No check-ins recorded yet.</p>
+    </section>
+
+    <!-- Account tab -->
+    <section id="tab-account" class="tab-panel" role="tabpanel" hidden>
+      <h2>Account</h2>
+
+      <section class="sub-card">
+        <h3>Display name</h3>
+        <p class="muted">Shown on the roster and in your check-ins.</p>
+        <form id="name-form">
+          <label for="display-name">Name</label>
+          <input id="display-name" type="text" maxlength="80" required />
+          <button type="submit">Save name</button>
+        </form>
+        <p id="name-message" class="status-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="sub-card">
+        <h3>Change password</h3>
+        <form id="password-form">
+          <label for="current-password">Current password</label>
+          <input id="current-password" type="password" autocomplete="current-password" required />
+
+          <label for="new-password">New password (min 8 characters)</label>
+          <input id="new-password" type="password" autocomplete="new-password" minlength="8" required />
+
+          <label for="confirm-password">Confirm new password</label>
+          <input id="confirm-password" type="password" autocomplete="new-password" minlength="8" required />
+
+          <button type="submit">Update password</button>
+        </form>
+        <p id="password-message" class="status-message" role="status" aria-live="polite"></p>
+      </section>
+    </section>
+  </main>
+
+  <!-- First-login display-name modal -->
+  <div id="name-modal" class="modal" hidden aria-modal="true" role="dialog" aria-labelledby="name-modal-title">
+    <div class="modal-card">
+      <h2 id="name-modal-title">Welcome! What should we call you?</h2>
+      <p class="muted">This name will appear on the roster. You can change it later under Account.</p>
+      <form id="name-modal-form">
+        <label for="name-modal-input">Display name</label>
+        <input id="name-modal-input" type="text" maxlength="80" required />
+        <button type="submit">Save</button>
+      </form>
+      <p id="name-modal-error" class="error" role="alert" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

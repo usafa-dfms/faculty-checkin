@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DFMS Faculty Check-In</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-page">
+  <main class="card">
+    <h1>DFMS Faculty Check-In</h1>
+    <p class="subtitle">Sign in with your department account.</p>
+
+    <form id="login-form" novalidate>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="username" required />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required />
+
+      <button type="submit" id="login-btn">Sign in</button>
+    </form>
+
+    <p id="login-error" class="error" role="alert" aria-live="polite"></p>
+
+    <p class="muted">
+      <a href="#" id="forgot-link">Forgot password?</a>
+    </p>
+
+    <p id="reset-message" class="muted" role="status" aria-live="polite"></p>
+  </main>
+
+  <script type="module">
+    import {
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      sendPasswordResetEmail,
+    } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { auth } from "./auth.js";
+
+    const form = document.getElementById("login-form");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const errorEl = document.getElementById("login-error");
+    const resetEl = document.getElementById("reset-message");
+    const loginBtn = document.getElementById("login-btn");
+    const forgotLink = document.getElementById("forgot-link");
+
+    // If already signed in, skip the login screen.
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.replace("app.html");
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorEl.textContent = "";
+      resetEl.textContent = "";
+      loginBtn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(
+          auth,
+          emailInput.value.trim(),
+          passwordInput.value
+        );
+        window.location.replace("app.html");
+      } catch (err) {
+        errorEl.textContent = friendlyAuthError(err);
+      } finally {
+        loginBtn.disabled = false;
+      }
+    });
+
+    forgotLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      errorEl.textContent = "";
+      resetEl.textContent = "";
+      const email = emailInput.value.trim();
+      if (!email) {
+        errorEl.textContent = "Enter your email above, then click “Forgot password?” again.";
+        return;
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        resetEl.textContent = "Password reset email sent. Check your inbox.";
+      } catch (err) {
+        errorEl.textContent = friendlyAuthError(err);
+      }
+    });
+
+    function friendlyAuthError(err) {
+      const code = err && err.code ? err.code : "";
+      switch (code) {
+        case "auth/invalid-email": return "That email address looks malformed.";
+        case "auth/user-disabled": return "This account has been disabled.";
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+        case "auth/invalid-credential":
+          return "Email or password is incorrect.";
+        case "auth/too-many-requests":
+          return "Too many failed attempts. Try again in a few minutes or reset your password.";
+        case "auth/network-request-failed":
+          return "Network error. Check your connection and try again.";
+        case "auth/missing-email":
+          return "Enter your email address.";
+        default:
+          return (err && err.message) || "Sign-in failed. Try again.";
+      }
+    }
+  </script>
+</body>
+</html>
