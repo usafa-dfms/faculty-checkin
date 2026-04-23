@@ -178,7 +178,7 @@ textarea { resize: vertical; }
 .auth-page .brand-rule {
   height: 3px;
   width: min(560px, 90%);
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 5.5rem;
   background: linear-gradient(90deg, transparent 0%, var(--gold) 20%, var(--gold) 80%, transparent 100%);
   border: none;
   border-radius: 2px;
