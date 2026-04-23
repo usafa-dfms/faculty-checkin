@@ -7,9 +7,15 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="auth-page">
+  <div class="brand-bar">
+    <span class="brand-wordmark">United States Air Force Academy</span>
+  </div>
+  <hr class="brand-rule" />
+
   <main class="card">
+    <img class="seal" src="assets/dfms-seal.png" alt="DFMS seal" onerror="this.style.display='none'" />
     <h1>DFMS Faculty Check-In</h1>
-    <p class="subtitle">Sign in with your department account.</p>
+    <p class="subtitle">Department of Mathematical Sciences</p>
 
     <form id="login-form" novalidate>
       <label for="email">Email</label>
@@ -29,6 +35,10 @@
 
     <p id="reset-message" class="muted" role="status" aria-live="polite"></p>
   </main>
+
+  <footer class="auth-footer">
+    USAFA &middot; Department of Mathematical Sciences
+  </footer>
 
   <script type="module">
     import {

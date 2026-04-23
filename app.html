@@ -9,9 +9,15 @@
 <body class="app-page">
   <header class="app-header">
     <div class="app-header-inner">
-      <h1>DFMS Faculty Check-In</h1>
+      <div class="brand">
+        <img class="brand-seal" src="assets/dfms-seal.png" alt="" onerror="this.style.display='none'" />
+        <div class="brand-text">
+          <span class="brand-sub">USAFA &middot; DFMS</span>
+          <h1>Faculty Check-In</h1>
+        </div>
+      </div>
       <div class="header-right">
-        <span id="who" class="muted"></span>
+        <span id="who"></span>
         <button type="button" id="logout-btn" class="btn-secondary">Sign out</button>
       </div>
     </div>
@@ -115,6 +121,12 @@
       </section>
     </section>
   </main>
+
+  <footer class="app-footer">
+    United States Air Force Academy
+    <span class="sep">&middot;</span>
+    Department of Mathematical Sciences
+  </footer>
 
   <!-- First-login display-name modal -->
   <div id="name-modal" class="modal" hidden aria-modal="true" role="dialog" aria-labelledby="name-modal-title">
